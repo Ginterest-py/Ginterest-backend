@@ -1,6 +1,7 @@
 from flask import Flask, make_response, request
 from gauth_python.requests import token_issuance,token_reissuance
-import setting, modules
+import modules
+import os
 from bson import json_util
 
 app = Flask(__name__)
@@ -13,9 +14,9 @@ def getCodeAndGenToken():
     params = request.get_json()
     user_token = token_issuance(
         code = params['client_code'],
-        clientId = setting.gauth_clientId,
-        clientSecret = setting.gauth_clientSecret,
-        redirectUri = setting.gauth_redirectUri
+        clientId = os.environ.get('gauth_clientId'),
+        clientSecret = os.environ.get('gauth_clientSecret'),
+        redirectUri = os.environ.get('gauth_redirectUri')
     )
     if ((modules.getUserIdFromDb(modules.getUserEmail(user_token))) == None):
         client_id = modules.writeUserDb(user_token)

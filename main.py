@@ -83,30 +83,25 @@ def getUserSearchPins():
     result = list(modules.getPostDb(keyword=keywords))
     return json_util.dumps(list(result), default=json_util.default)
 
-# @app.route('/api/pins/<pinId>/likes', methods=['POST'])
-# def postPostLikes(pinId):
-#     clientId = request.args.get('clientId')
-#     if (modules.putPostLikeDb(pinId,clientId) == False):
-#         return make_response("status 400", 400)
-#     return make_response("status 200", 200)
+@app.route('/api/pins/<pinId>/likes', methods=['POST'])
+def postPostLikes(pinId):
+    clientId = request.args.get('clientId')
+    if (modules.putPostLikeDb(pinId,clientId) == False):
+        return make_response("status 400", 400)
+    return make_response("status 200", 200)
 
-# @app.route('/api/pins/<pinId>/dislikes', methods=['POST'])
-# def postPostdisLikes(pinId):
-#     clientId = request.args.get('clientId')
-#     if (modules.deletePostLikeDb(pinId,clientId) == False):
-#         return make_response("status 400", 400)
-#     return make_response("status 200", 200)
+@app.route('/api/pins/<pinId>/dislikes', methods=['POST'])
+def postPostdisLikes(pinId):
+    clientId = request.args.get('clientId')
+    if (modules.deletePostLikeDb(pinId,clientId) == False):
+        return make_response("status 400", 400)
+    return make_response("status 200", 200)
 
 
 @app.route('/api/pins/<pinId>', methods=['DELETE'])
 def deletePostLikes(pinId):
     modules.deletePostDb(pinId)
     return make_response("status 200", 200)
-
-@app.route('/api/images', methods=['POST'])
-def upload_profile_picture():
-    params = request.get_json()
-    modules.uploadFile(request,params['clientId'])
 
 if __name__ == '__main__':
     app.run(debug=True)

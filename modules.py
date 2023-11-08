@@ -21,6 +21,7 @@ def writeUserDb(user_token):
     doc = {
         'clientId' : secrets.token_hex(nbytes=40),
         'email' : UserInfo.email,
+        'profile_image' : UserInfo.profileUrl,
         'liked_post' : [],
         'created_at': datetime.datetime.utcnow()
     }
@@ -139,27 +140,3 @@ def writeBoardDb(doc, clientId, type, post_id, ref_id):
 #     return user_info
 
 # --
-
-def uploadFile(request,clientId):
-    if (checkUserExists(clientId) == False):
-        return False
-    if 'file' not in request.files:
-        return "파일을 선택해주세요."
-
-    file = request.files['file']
-    if file.filename == '':
-        return False
-    if checkUserExists(client) == False:
-        return False
-    if file:
-        filename = f"{secrets.token_hex(10)}"
-        file.save(os.path.join(os.environ.get('UPLOAD_PATH'), filename))
-
-        # MongoDB에 파일 정보 저장
-        image_info = {
-            "filename": filename,
-            "clientId": clientId
-        }
-
-        result = db.images.insert_one(image_info)
-        return result.inserted_id

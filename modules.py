@@ -1,10 +1,9 @@
 from gauth_python.requests import user_info
 from pymongo import MongoClient
-import setting
 import datetime, secrets, os
 from bson.objectid import ObjectId
 
-client = MongoClient(setting.MONGO_URL)
+client = MongoClient(os.environ.get('MONGO_URL'))
 db = client['event']
 nowtime = datetime.datetime.now()
 
@@ -154,7 +153,7 @@ def uploadFile(request,clientId):
         return False
     if file:
         filename = f"{secrets.token_hex(10)}"
-        file.save(os.path.join(setting.uploadpat, filename))
+        file.save(os.path.join(os.environ.get('UPLOAD_PATH'), filename))
 
         # MongoDB에 파일 정보 저장
         image_info = {
